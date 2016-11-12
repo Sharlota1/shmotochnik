@@ -21,6 +21,13 @@ textarea#description_clother {
     padding: 10px;
 }
 
+textarea#name_clother {
+    width: 300px;
+    height: 15px;
+    resize: none;
+    padding: 10px;
+}
+
 .upload_image {
     border: 1px solid #ccc;
     padding: 20px;
