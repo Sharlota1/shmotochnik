@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Отправка изображения на сервер</title>
-<link rel="stylesheet" type="text/css" href="upload_image.css">
+		<link rel="stylesheet" type="text/css" href="upload_image.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 
 	 <body>
@@ -55,9 +55,17 @@
 	 				$description = $_POST["description_clother"];
 	 				$min_t = $_POST["min_temperature"];
 	 				$max_t = $_POST["max_temperature"];
-	 				$image = addslashes($_FILES['image']['tmp_name']);
-	 				$image = file_get_contents($image);
-	 				$image = base64_encode($image);
+
+	 				$info =  pathinfo($_FILES['image']['name']);
+					$ext = $info['extension']; // get the extension of the file
+					$newname = $info["filename"].".".$ext; 
+
+					$target = 'images/'.$newname;
+					$image = $target;
+					if(move_uploaded_file( $_FILES['image']['tmp_name'], $target)){
+	 				// $image = addslashes($_FILES['image']['tmp_name']);
+	 				// $image = file_get_contents($image);
+	 				// $image = base64_encode($image);
 	 					if (!empty($_POST["check_list"])) {
 	 						$array_type = array();
 	 						foreach($_POST['check_list'] as $type) {
@@ -66,6 +74,9 @@
 	 						$string_type = implode(",", $array_type);
 	 					}
 	 				save_image($name, $description, $string_type, $min_t, $max_t, $image);
+	 				} else {
+	 					echo "<br /> Not downloaded";
+	 				}
 	 			}
 	 		}
 
@@ -73,14 +84,16 @@
 	 			$connect = mysql_connect("localhost", "root", "");
 	 			mysql_select_db("new_database", $connect);
 	 			$save = "INSERT into images (name, description, type, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$string_type', '$min_t', '$max_t', '$image')";
-	 			$result = mysql_query($save, $connect);
+	 				$result = mysql_query($save, $connect);
 	 			if($result) {
 	 				echo "<br /> Изображение добавлено";
+	 				header('location: http://'.$_SERVER['HTTP_HOST'].'/uploadimg/Load_picture.php');
 	 				exit();
 	 			} else {
 	 				echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
 	 			}
-	 		}
+	 	mysql_close($connect);
+			}
 	 	?>
 
 	 </body>
