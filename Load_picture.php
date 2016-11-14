@@ -3,6 +3,8 @@
 	<head>
 		<title>Отправка изображения на сервер</title>
 		<link rel="stylesheet" type="text/css" href="upload_image.css">
+		<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="js/load_picture.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 
@@ -25,16 +27,28 @@
 		   		</div>
 
 		   		<div class="row_upload_image">
-	 				<span>Выберите тип одежды:</span>
-	 				<div class="check_clother">
-		 				<input type="checkbox" id="check1" name="check_list[]" value="Домашняя одежда">Домашняя одежда<br />
-		 				<input type="checkbox" id="check2" name="check_list[]" value="Парадная одежда">Парадная одежда<br />
+	 				<span>Выберите стиль одежды:</span>
+	 				<div class="check_clother border_none_bottom">
+		 				<input type="checkbox" id="check1" name="check_list[]" value="Домашняя одежда">Повседневный стиль<br />
+		 				<input type="checkbox" id="check2" name="check_list[]" value="Парадная одежда">Официальный/вечерний стиль<br />
 	 				</div>
-	 				<div class="check_clother">
-	 					<input type="checkbox" id="check3" name="check_list[]" value="Спортивная одежда">Спортивная одежда<br />
-		 				<input type="checkbox" id="check4" name="check_list[]" value="Повседневная одежда">Повседневная одежда<br />
+	 				<div class="check_clother border_none_top">
+	 					<input type="checkbox" id="check3" name="check_list[]" value="Спортивная одежда">Деловой стиль<br />
+		 				<input type="checkbox" id="check4" name="check_list[]" value="Повседневная одежда">Спортивный стиль<br />
 		 			</div>
 		   		</div>
+
+		   		<div class="row_upload_image">
+		   			<span>Выберите категорию одежды:</span>
+		   			<select>
+  						<option>Верх</option>
+  						<option>Низ</option>
+  						<option>Костюм</option>
+  						<option>Верхняя одежда</option>
+  						<option>Обувь</option>
+  						<option>Аксессуары</option>
+					</select>
+				</div>
 
 		   		<div class="row_upload_image">
 	 				<span>Температура:</span>
@@ -42,11 +56,13 @@
 				 		<input type="number" id="max_temperature" placeholder="Max" name="max_temperature">
 		   		</div>
 
-		   	<input type="submit" name="submit" value="Отправить">
+			<input id="send_data_display" value="Отправить" type="button" onclick="shm.checkInbutByEmpty()">
+		   	<input type="submit" name="submit" id="send_data" value="Отправить">
 	   		</div>
 	 	</form>
 
 	 	<?php
+
 	 		if(isset($_POST['submit'])) {
 	 			if (getimagesize($_FILES['image']['tmp_name']) == FALSE) {
 	 				echo "Пожалуйста, выберите изображение!";
@@ -58,8 +74,10 @@
 
 	 				$info =  pathinfo($_FILES['image']['name']);
 					$ext = $info['extension']; // get the extension of the file
-					$newname = $info["filename"].".".$ext; 
-
+					$file_name = rus2translit($info["filename"]);
+					$newname = $file_name.".".$ext; 
+						
+					//$_newname=iconv ("utf-8", "cp1251", $newname);
 					$target = 'images/'.$newname;
 					$image = $target;
 					if(move_uploaded_file( $_FILES['image']['tmp_name'], $target)){
@@ -79,9 +97,10 @@
 	 				}
 	 			}
 	 		}
-
+	 		
 	 		function save_image($name, $description, $string_type, $min_t, $max_t, $image) {
 	 			$connect = mysql_connect("localhost", "root", "");
+	 			//mysql_query("SET NAMES cp1251");
 	 			mysql_select_db("new_database", $connect);
 	 			$save = "INSERT into images (name, description, type, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$string_type', '$min_t', '$max_t', '$image')";
 	 				$result = mysql_query($save, $connect);
@@ -92,8 +111,36 @@
 	 			} else {
 	 				echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
 	 			}
-	 	mysql_close($connect);
+	 			mysql_close($connect);
 			}
+			function rus2translit($string) {
+			    $converter = array(
+			        'а' => 'a',   'б' => 'b',   'в' => 'v',
+			        'г' => 'g',   'д' => 'd',   'е' => 'e',
+			        'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+			        'и' => 'i',   'й' => 'y',   'к' => 'k',
+			        'л' => 'l',   'м' => 'm',   'н' => 'n',
+			        'о' => 'o',   'п' => 'p',   'р' => 'r',
+			        'с' => 's',   'т' => 't',   'у' => 'u',
+			        'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+			        'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+			        'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+			        'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+			        
+			        'А' => 'A',   'Б' => 'B',   'В' => 'V',
+			        'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+			        'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+			        'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+			        'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+			        'О' => 'O',   'П' => 'P',   'Р' => 'R',
+			        'С' => 'S',   'Т' => 'T',   'У' => 'U',
+			        'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+			        'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+			        'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+			        'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+			    );
+		    return strtr($string, $converter);
+		}
 	 	?>
 
 	 </body>

@@ -36,6 +36,9 @@ body{
 
 .display_details>span:first-child {
     text-align: center;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .display_details {
     padding: 10px 10px;
