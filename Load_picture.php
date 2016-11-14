@@ -29,24 +29,25 @@
 		   		<div class="row_upload_image">
 	 				<span>Выберите стиль одежды:</span>
 	 				<div class="check_clother border_none_bottom">
-		 				<input type="checkbox" id="check1" name="check_list[]" value="Домашняя одежда">Повседневный стиль<br />
-		 				<input type="checkbox" id="check2" name="check_list[]" value="Парадная одежда">Официальный/вечерний стиль<br />
+		 				<input type="checkbox" id="check1" name="check_list[]" value="Повседневный стиль">Повседневный стиль<br />
+		 				<input type="checkbox" id="check2" name="check_list[]" value="Официальный/вечерний стиль">Официальный/вечерний стиль<br />
 	 				</div>
 	 				<div class="check_clother border_none_top">
-	 					<input type="checkbox" id="check3" name="check_list[]" value="Спортивная одежда">Деловой стиль<br />
-		 				<input type="checkbox" id="check4" name="check_list[]" value="Повседневная одежда">Спортивный стиль<br />
+	 					<input type="checkbox" id="check3" name="check_list[]" value="Деловой стиль">Деловой стиль<br />
+		 				<input type="checkbox" id="check4" name="check_list[]" value="Спортивный стиль">Спортивный стиль<br />
 		 			</div>
 		   		</div>
 
 		   		<div class="row_upload_image">
 		   			<span>Выберите категорию одежды:</span>
-		   			<select>
-  						<option>Верх</option>
-  						<option>Низ</option>
-  						<option>Костюм</option>
-  						<option>Верхняя одежда</option>
-  						<option>Обувь</option>
-  						<option>Аксессуары</option>
+		   			<select name="category">
+  						<option value="Верх" selected>Верх</option>
+  						<option value="Низ">Низ</option>
+  						<option value="Костюм">Костюм</option>
+  						<option value="Верхняя одежда">Верхняя одежда</option>
+  						<option value="Обувь">Обувь</option>
+  						<option value="Головной убор">Головной убор</option>
+  						<option value="Аксессуар">Аксессуар</option>
 					</select>
 				</div>
 
@@ -71,13 +72,12 @@
 	 				$description = $_POST["description_clother"];
 	 				$min_t = $_POST["min_temperature"];
 	 				$max_t = $_POST["max_temperature"];
+	 				$category = $_POST['category'];
 
 	 				$info =  pathinfo($_FILES['image']['name']);
 					$ext = $info['extension']; // get the extension of the file
 					$file_name = rus2translit($info["filename"]);
 					$newname = $file_name.".".$ext; 
-						
-					//$_newname=iconv ("utf-8", "cp1251", $newname);
 					$target = 'images/'.$newname;
 					$image = $target;
 					if(move_uploaded_file( $_FILES['image']['tmp_name'], $target)){
@@ -91,18 +91,18 @@
 	 						}
 	 						$string_type = implode(",", $array_type);
 	 					}
-	 				save_image($name, $description, $string_type, $min_t, $max_t, $image);
+
+	 				save_image($name, $description, $string_type, $category, $min_t, $max_t, $image);
 	 				} else {
 	 					echo "<br /> Not downloaded";
 	 				}
 	 			}
 	 		}
 	 		
-	 		function save_image($name, $description, $string_type, $min_t, $max_t, $image) {
+	 		function save_image($name, $description, $string_type, $category, $min_t, $max_t, $image) {
 	 			$connect = mysql_connect("localhost", "root", "");
-	 			//mysql_query("SET NAMES cp1251");
 	 			mysql_select_db("new_database", $connect);
-	 			$save = "INSERT into images (name, description, type, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$string_type', '$min_t', '$max_t', '$image')";
+	 			$save = "INSERT into images (name, description, type, category, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$string_type', '$category', '$min_t', '$max_t', '$image')";
 	 				$result = mysql_query($save, $connect);
 	 			if($result) {
 	 				echo "<br /> Изображение добавлено";
@@ -113,6 +113,7 @@
 	 			}
 	 			mysql_close($connect);
 			}
+
 			function rus2translit($string) {
 			    $converter = array(
 			        'а' => 'a',   'б' => 'b',   'в' => 'v',
@@ -124,7 +125,7 @@
 			        'с' => 's',   'т' => 't',   'у' => 'u',
 			        'ф' => 'f',   'х' => 'h',   'ц' => 'c',
 			        'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
-			        'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+			        'ь' => '`',   'ы' => 'y',   'ъ' => '`',
 			        'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
 			        
 			        'А' => 'A',   'Б' => 'B',   'В' => 'V',
@@ -136,7 +137,7 @@
 			        'С' => 'S',   'Т' => 'T',   'У' => 'U',
 			        'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
 			        'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
-			        'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+			        'Ь' => '`',   'Ы' => 'Y',   'Ъ' => '`',
 			        'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
 			    );
 		    return strtr($string, $converter);
