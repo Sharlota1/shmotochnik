@@ -2,10 +2,14 @@
 <html>
 	<head>
 		<title>Отправка изображения на сервер</title>
-		<link rel="stylesheet" type="text/css" href="upload_image.css">
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<link rel="stylesheet" type="text/css" href="css/upload_image.css">
+
 		<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="js/load_picture.js"></script>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		
 	</head>
 
 	 <body>
@@ -89,7 +93,7 @@
 	 						foreach($_POST['check_list'] as $type) {
 	 							array_push($array_type, $type);
 	 						}
-	 						$string_type = implode(",", $array_type);
+	 						$string_type = implode(", ", $array_type);
 	 					}
 
 	 				save_image($name, $description, $string_type, $category, $min_t, $max_t, $image);
