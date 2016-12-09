@@ -13,7 +13,9 @@
 			<div id="wrapper">
  <div class="profile">
                     <a href="dashboard.php" accesskey="2" title="">
-                        <?php echo $_SESSION["login"]="Personal room" ?>
+                        <?php 
+                        echo $_SESSION["login"];
+                        ?>
                     </a>
 
                 </div>

@@ -1,4 +1,4 @@
 <?php
-    $db = mysql_connect ("localhost","nika","12345");
-    mysql_select_db ("shmotochnik",$db);
-    ?>
+    $connect = mysql_connect("mysql.zzz.com.ua", "rednikaaaaa", "90ibaped");
+    mysql_select_db("rednika", $connect);
+?>
