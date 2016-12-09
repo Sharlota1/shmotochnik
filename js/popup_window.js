@@ -1,35 +1,38 @@
 $(document).ready(function(){
-	$("select[name='category']").on("change", function(){
-		location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'";
-	});
-	$("select[name='type']").on("change", function(){
-		location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'";
-	});
 	var type = getParameters("type");
 	var category = getParameters("category");
+	$("select[name='category']").on("change", function(){
+		if(!!type && ($("select[name='category']").val() != "Выберите категорию...")){
+			location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val() + "'";
+		} else {
+			debugger
+			if($("select[name='category']").val() != "Выберите категорию..."){
+				location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'";
+			} else {
+				location.href = location.origin + location.pathname;
+
+			}
+		}
+	});
+	$("select[name='type']").on("change", function(){
+		if (!!category && ($("select[name='type']").val() != "Выберите стиль...")) {
+			location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'&category='"+ $("select[name='category']").val() + "'";
+		} else {
+			if($("select[name='type']").val() != "Выберите стиль..."){
+				location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'";
+			} else {
+				location.href = location.origin + location.pathname;
+			}
+		}
+	});
 	if (!!category) {
 		$("option[value="+ decodeURIComponent(category)+"]").attr("selected", "selected");
 	}
 	if (!!type) {
 		$("option[value="+ decodeURIComponent(type)+"]").attr('selected','selected');
-		//$("select[name='type']").val(decodeURIComponent(type));
 	}
-
 });
-/*
-function GetURLParameter(sParam) {
-    var sPageURL = location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}​
-*/
+
 function getParameters(sParam) {
 	 var sPageURL = location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
@@ -43,7 +46,6 @@ function getParameters(sParam) {
     }
 }
 function display_elemnt(name, description, img_link, type, category, min_temperature, max_temperature) {
-	//$('#popup_window').css("display", "block");
 	var popup_block = $('<div id="popup_window" class="pop_up">'
 						+'<div class="modal_content">'
 							+'<span id="close" onclick="close_popup(event)">x</span>'
@@ -81,8 +83,6 @@ function edit_element(id, name, description, img_link, type, category, min_tempe
 					 				+'<div class="check_clother">'
 						 				+'<input type="checkbox" id="check1" name="check_list[]" value="Повседневный стиль">Повседневный стиль<br />'
 						 				+'<input type="checkbox" id="check2" name="check_list[]" value="Официальный/вечерний стиль">Официальный/вечерний стиль<br />'
-					 				//+'</div>'
-					 				//+'<div class="check_clother border_none_top">'
 					 					+'<input type="checkbox" id="check3" name="check_list[]" value="Деловой стиль">Деловой стиль<br />'
 						 				+'<input type="checkbox" id="check4" name="check_list[]" value="Спортивный стиль">Спортивный стиль<br />'
 						 			+'</div>'

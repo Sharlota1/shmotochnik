@@ -17,10 +17,18 @@
 
 <?php
 
+
 if (isset($_GET['id_del'])) {
 	$connect = mysql_connect("localhost", "root", "");
 	mysql_select_db("new_database", $connect);
 	$del_id = $_GET["id_del"];
+	$display = "SELECT * FROM images WHERE id=$del_id";
+	$result_for_get = mysql_query($display, $connect);
+	$res = mysql_fetch_array ($result_for_get);
+	$filename = $res['image'];
+	 if (file_exists($filename)) {
+    	unlink($filename);
+  	} 
 	$sql = "DELETE FROM images WHERE id='$del_id'";
 	$result = mysql_query($sql, $connect);
 	if ($result) {
@@ -30,15 +38,14 @@ if (isset($_GET['id_del'])) {
 	}
 }
 
-
-function display_image_by_parameters($parameters, $value) {
+function display_image_by_parameter($parameters, $value) {
 		$connect = mysql_connect("localhost", "root", "");
 	 	mysql_select_db("new_database", $connect);
 	 	$display = "SELECT * FROM images WHERE $parameters=$value";
 	 	$result = mysql_query($display, $connect);
 	 	echo '<div id="filters">
 		<select name="category">
-			<option value="Выберите категорию..." disabled selected>Выберите категорию...</option>
+			<option value="Выберите категорию..." selected>Выберите категорию...</option>
 			<option value="Верх">Верх</option>
 			<option value="Низ">Низ</option>
 			<option value="Костюм">Костюм</option>
@@ -72,23 +79,14 @@ function display_image_by_parameters($parameters, $value) {
 		
 		mysql_close($connect);
 	}
-if (isset($_GET['category'])) {
-	$category = $_GET['category'];
-	display_image_by_parameters("category", $category);
-}
-if (isset($_GET['type'])) {
-	$type = $_GET['type'];
-	display_image_by_parameters("type", $type);
-}
-
-	function display_image() {
+	function display_image_by_parameters($parameters1, $parameters2, $value1, $value2) {
 		$connect = mysql_connect("localhost", "root", "");
 	 	mysql_select_db("new_database", $connect);
-	 	$display = "SELECT * FROM images ";
+	 	$display = "SELECT * FROM images WHERE $parameters1=$value1 and $parameters2=$value2";
 	 	$result = mysql_query($display, $connect);
-		echo '<div id="filters">
+	 	echo '<div id="filters">
 		<select name="category">
-			<option value="Выберите категорию..." disabled selected>Выберите категорию...</option>
+			<option value="Выберите категорию..." selected>Выберите категорию...</option>
 			<option value="Верх">Верх</option>
 			<option value="Низ">Низ</option>
 			<option value="Костюм">Костюм</option>
@@ -98,7 +96,64 @@ if (isset($_GET['type'])) {
 			<option value="Аксессуар">Аксессуар</option>
 		</select>
 		<select name="type">
-			<option value="Выберите стиль..." disabled selected>Выберите стиль...</option>
+			<option value="Выберите стиль..." selected>Выберите стиль...</option>
+			<option value="Повседневный стиль">Повседневный стиль</option>
+			<option value="Официальный/вечерний стиль">Официальный/вечерний стиль</option>
+			<option value="Деловой стиль">Деловой стиль</option>
+			<option value="Спортивный стиль">Спортивный стиль</option>
+		</select>
+		</div>';
+		if(mysql_num_rows($result) > 0)
+		{			
+	 		while($row = mysql_fetch_array($result)) {
+	 		$id = $row['id'];
+	 		echo '<div class="block_for_image">
+					<div class="toolbar"><img onclick="edit_element(\''.$row['id'].'\',\''.$row['name'].'\',\''.$row['description'].'\', \''.$row['image'].'\', \''.$row['type'].'\', \''.$row['category'].'\', \''.$row['min_temperature'].'\', \''.$row['max_temperature'].'\')" class="icon" src="icon/edit.png"/><a href="Display_picture.php?id_del='.$id.'"><img class="icon" src="icon/delete.png"></a></div>
+	 		<div class="display_element" onclick="display_elemnt(\''.$row['name'].'\',\''.$row['description'].'\', \''.$row['image'].'\', \''.$row['type'].'\', \''.$row['category'].'\', \''.$row['min_temperature'].'\', \''.$row['max_temperature'].'\')">
+	 		<div class="display_image"><img src="'.$row['image'].' "></div>
+	 			<div class="display_details">
+	 				<span>'.$row['name'].'</span>
+	 			</div>
+	 		</div></div>';
+	 	}
+	 }
+		
+		mysql_close($connect);
+	}
+	if (isset($_GET['type']) && isset($_GET['category'])) {
+		$type = $_GET['type'];
+		$category = $_GET['category'];
+		display_image_by_parameters("type", "category", $type, $category);
+	}
+
+	if (isset($_GET['category']) && !isset($_GET['type'])) {
+		$category = $_GET['category'];
+		display_image_by_parameter("category", $category);
+	}
+	if (isset($_GET['type']) && !isset($_GET['category'])) {
+		$type = $_GET['type'];
+		display_image_by_parameter("type", $type);
+	}
+
+	function display_image() {
+
+		$connect = mysql_connect("localhost", "root", "");
+	 	mysql_select_db("new_database", $connect);
+	 	$display = "SELECT * FROM images ";
+	 	$result = mysql_query($display, $connect);
+		echo '<div id="filters">
+		<select name="category">
+			<option value="Выберите категорию..." selected>Выберите категорию...</option>
+			<option value="Верх">Верх</option>
+			<option value="Низ">Низ</option>
+			<option value="Костюм">Костюм</option>
+			<option value="Верхняя одежда">Верхняя одежда</option>
+			<option value="Обувь">Обувь</option>
+			<option value="Головной убор">Головной убор</option>
+			<option value="Аксессуар">Аксессуар</option>
+		</select>
+		<select name="type">
+			<option value="Выберите стиль..." selected>Выберите стиль...</option>
 			<option value="Повседневный стиль">Повседневный стиль</option>
 			<option value="Официальный/вечерний стиль">Официальный/вечерний стиль</option>
 			<option value="Деловой стиль">Деловой стиль</option>

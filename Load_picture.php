@@ -79,15 +79,12 @@
 	 				$category = $_POST['category'];
 
 	 				$info =  pathinfo($_FILES['image']['name']);
-					$ext = $info['extension']; // get the extension of the file
+					$ext = $info['extension'];
 					$file_name = rus2translit($info["filename"]);
 					$newname = $file_name.".".$ext; 
 					$target = 'images/'.$newname;
 					$image = $target;
 					if(move_uploaded_file( $_FILES['image']['tmp_name'], $target)){
-	 				// $image = addslashes($_FILES['image']['tmp_name']);
-	 				// $image = file_get_contents($image);
-	 				// $image = base64_encode($image);
 	 					if (!empty($_POST["check_list"])) {
 	 						$array_type = array();
 	 						foreach($_POST['check_list'] as $type) {
