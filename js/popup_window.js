@@ -16,7 +16,7 @@ $(document).ready(function(){
 	});
 	$("select[name='type']").on("change", function(){
 		if (!!category && ($("select[name='type']").val() != "Выберите стиль...")) {
-			location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'&category='"+ $("select[name='category']").val() + "'";
+			location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val()+ "'";
 		} else {
 			if($("select[name='type']").val() != "Выберите стиль..."){
 				location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'";
