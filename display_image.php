@@ -1,8 +1,11 @@
 <?php
 	session_start();
+	$name_user = $_SESSION['login'];
+
 	function display_image() {
 		include ("bd.php");
-	 	$display = "SELECT * FROM images";
+		global $name_user;
+	 	$display = "SELECT * FROM images WHERE name_user = '$name_user'";
 	 	$result = mysql_query($display, $connect);
 		getFilter();
 	 	while($row = mysql_fetch_array($result)) {
@@ -29,8 +32,9 @@
 
 	function display_image_by_parameter($parameters, $value) {
 		include ("bd.php");
+		global $name_user;
 	 	if ($parameters == "type") {
-	 		$display = "SELECT * FROM type_of_clother WHERE value_type=$value";
+	 		$display = "SELECT * FROM type_of_clother WHERE value_type = $value and name_user = '$name_user'";
 	 		$result = mysql_query($display, $connect);
 	 		getFilter();
 	 		if(mysql_num_rows($result) > 0) {			
@@ -54,7 +58,7 @@
 	 			}
 	 		}
 	 	} else {
-	 		$display = "SELECT * FROM images WHERE $parameters=$value";
+	 		$display = "SELECT * FROM images WHERE $parameters = $value and name_user = '$name_user'";
 	 		$result = mysql_query($display, $connect);
 	 		getFilter();
 			if(mysql_num_rows($result) > 0) {			
@@ -84,7 +88,8 @@
 
 	function display_image_by_parameters($parameters1, $parameters2, $value1, $value2) {
 		include ("bd.php");
-	 	$display = "SELECT * FROM type_of_clother WHERE value_type=$value1";
+		global $name_user;
+	 	$display = "SELECT * FROM type_of_clother WHERE value_type = $value1 and name_user = '$name_user'";
 	 	$result = mysql_query($display, $connect);
 	 	getFilter();
 		if(mysql_num_rows($result) > 0) {			
@@ -97,7 +102,7 @@
  						array_push($array_type, $row_type['value_type']);
  						$string_type = implode(", ", $array_type);
  					}
-	 			$display_by_second = "SELECT * FROM images WHERE id = '$id' and $parameters2 = $value2";
+	 			$display_by_second = "SELECT * FROM images WHERE id = '$id' and $parameters2 = $value2 and name_user = '$name_user'";
 	 			$result_images = mysql_query($display_by_second, $connect);
 	 			if(mysql_num_rows($result_images) > 0) {
 	 				$row = mysql_fetch_array($result_images);

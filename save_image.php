@@ -9,6 +9,7 @@
 	 		$min_t = $_POST["min_temperature"];
 	 		$max_t = $_POST["max_temperature"];
 	 		$category = $_POST['category'];
+	 		$name_user = $_SESSION['login'];
 
 	 		$info =  pathinfo($_FILES['image']['name']);
 			$ext = $info['extension'];
@@ -17,16 +18,16 @@
 			$target = 'images/'.$newname;
 			$image = $target;
 			if(move_uploaded_file($_FILES['image']['tmp_name'], $target)){
-	 			save_image($name, $description, $category, $min_t, $max_t, $image);
+	 			save_image($name, $description, $category, $min_t, $max_t, $image, $name_user);
 	 		} else {
 	 			echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
 	 		}
 	 	}
 	}
 	 		
-	function save_image($name, $description, $category, $min_t, $max_t, $image) {
+	function save_image($name, $description, $category, $min_t, $max_t, $image, $name_user) {
 	 	include ("bd.php");
-	 	$save = "INSERT into images (name, description, category, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$category', '$min_t', '$max_t', '$image')";
+	 	$save = "INSERT into images (name, description, category, min_temperature, max_temperature, image, name_user) VALUES ('$name', '$description', '$category', '$min_t', '$max_t', '$image', '$name_user')";
 	 	$result = mysql_query($save, $connect);
 	 	if($result) {
 	 		$id = mysql_insert_id();

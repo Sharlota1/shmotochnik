@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <html>
 	<head>
 		<title>Шмоточник</title>
@@ -21,7 +20,10 @@
 	
 	<body>
 		<div id="wrapper">
-			<a href="index.php">Exit</a>
+			<?php
+				echo "<a href='index.php'>Выход</a>";
+			?>
+			
 	        <nav id="nav">
 				<a href="#me"><span>Home</span>Home</a>
 				<a href="#load"><span>Load</span>Load</a>

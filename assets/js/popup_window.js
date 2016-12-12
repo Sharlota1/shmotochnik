@@ -3,25 +3,24 @@ $(document).ready(function(){
 	var category = getParameters("category");
 	$("select[name='category']").on("change", function(){
 		if(!!type && ($("select[name='category']").val() != "Выберите категорию...")){
-			location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val() + "'";
+			location.href = location.origin + location.pathname + "#setting" + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val() + "'";
 		} else {
-			debugger
 			if($("select[name='category']").val() != "Выберите категорию..."){
-				location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'";
+				location.href = location.origin + location.pathname + "#setting" + "?category='"+ $("select[name='category']").val() + "'";
 			} else {
-				location.href = location.origin + location.pathname;
+				location.href = location.origin + location.pathname + "#setting";
 
 			}
 		}
 	});
 	$("select[name='type']").on("change", function(){
 		if (!!category && ($("select[name='type']").val() != "Выберите стиль...")) {
-			location.href = location.origin + location.pathname + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val()+ "'";
+			location.href = location.origin + location.pathname + "#setting" + "?category='"+ $("select[name='category']").val() + "'&type='"+ $("select[name='type']").val()+ "'";
 		} else {
 			if($("select[name='type']").val() != "Выберите стиль..."){
-				location.href = location.origin + location.pathname + "?type='"+ $("select[name='type']").val() + "'";
+				location.href = location.origin + location.pathname + "#setting" + "?type='"+ $("select[name='type']").val() + "'";
 			} else {
-				location.href = location.origin + location.pathname;
+				location.href = location.origin + location.pathname + "#setting" ;
 			}
 		}
 	});

@@ -1,5 +1,4 @@
-<?php session_start();
-?>
+<?php session_start();?>
 
 <html>
 	<head>
@@ -11,12 +10,10 @@
 	<body>
 
 			<div id="wrapper">
- <div class="profile">
-                    <a href="dashboard.php" accesskey="2" title="">
-                        <?php 
-                        echo $_SESSION["login"];
-                        ?>
-                    </a>
+			<div class="profile">
+ 					<?php
+ 					if(isset($_SESSION["login"])) echo '<a href="dashboard.php" accesskey="2" title="">Личный кабинет</a>';
+                    ?>
 
                 </div>
 					<nav id="nav">
