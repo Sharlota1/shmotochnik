@@ -1,6 +1,6 @@
-$(document).ready(function(){	
+$(document).ready(function(){
+	
 });
-
 var shm = shm || {};
 
 shm.checkInbutByEmpty = function(){
@@ -20,7 +20,6 @@ shm.checkInbutByEmpty = function(){
 	var correct_data = true;
 	if(!isTypeChecked){
 		correct_data = false;
-
 	}
 	$(".dataIsNotCorrect").removeClass("dataIsNotCorrect");
 	if($file_of_clother.val() == ""){

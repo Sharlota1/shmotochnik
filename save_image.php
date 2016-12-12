@@ -9,41 +9,39 @@
 	 		$min_t = $_POST["min_temperature"];
 	 		$max_t = $_POST["max_temperature"];
 	 		$category = $_POST['category'];
-	 		$name_user = $_SESSION['login'];
-	 		 echo $_SESSION["login"];
+
 	 		$info =  pathinfo($_FILES['image']['name']);
 			$ext = $info['extension'];
 			$file_name = rus2translit($info["filename"]);
 			$newname = $file_name.".".$ext; 
 			$target = 'images/'.$newname;
 			$image = $target;
-					
-				if(move_uploaded_file( $_FILES['image']['tmp_name'], $target)){
-	 				if (!empty($_POST["check_list"])) {
-	 					$array_type = array();
-	 					foreach($_POST['check_list'] as $type) {
-	 						array_push($array_type, $type);
-	 					}
-	 					$string_type = implode(", ", $array_type);
-	 				}
-	 				save_image($name, $description, $string_type, $category, $min_t, $max_t, $image, $name_user);
-	 			} else {
-	 				echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
-	 				}
-	 		}
-	 	}
-	 		
-	 function save_image($name, $description, $string_type, $category, $min_t, $max_t, $image, $name_user) {
-	 	include ("bd.php");
-	 	$save = "INSERT into images (name, description, type, category, min_temperature, max_temperature, image, name_user) VALUES ('$name', '$description', '$string_type', '$category', '$min_t', '$max_t', '$image', '$name_user')";
-	 	$result = mysql_query($save, $connect);
-	 		if($result) {
-	 			echo "<br /> Изображение добавлено";
-	 			header('location: http://'.$_SERVER['HTTP_HOST'].'/dashboard.php#load');
-	 			exit();
+			if(move_uploaded_file($_FILES['image']['tmp_name'], $target)){
+	 			save_image($name, $description, $category, $min_t, $max_t, $image);
 	 		} else {
 	 			echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
 	 		}
+	 	}
+	}
+	 		
+	function save_image($name, $description, $category, $min_t, $max_t, $image) {
+	 	include ("bd.php");
+	 	$save = "INSERT into images (name, description, category, min_temperature, max_temperature, image) VALUES ('$name', '$description', '$category', '$min_t', '$max_t', '$image')";
+	 	$result = mysql_query($save, $connect);
+	 	if($result) {
+	 		$id = mysql_insert_id();
+	 		if (!empty($_POST["check_list"])) {
+	 			$array_type = array();
+	 			foreach($_POST['check_list'] as $type) {
+	 				$save_type = "INSERT into type_of_clother (id_images, value_type) VALUES ('$id', '$type')";
+	 				$result_type = mysql_query($save_type, $connect);
+ 				}
+	 		}
+	 		header('location: http://'.$_SERVER['HTTP_HOST'].'/dashboard.php#load');
+	 		exit();
+	 	} else {
+	 		echo "<br /> Ошибка! Изображение не добавлено. Повторите попытку!";
+	 	}
 	 	mysql_close($connect);
 	}
 

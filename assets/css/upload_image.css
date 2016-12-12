@@ -1,0 +1,68 @@
+.row_upload_image > span {
+    width: 249px;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.row_upload_image > input[type=number] {
+    width: 50px;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.row_upload_image {
+    padding-bottom: 10px;
+}
+
+textarea#description_clother {
+    width: 300px;
+    height: 80px;
+    resize: none;
+    padding: 10px;
+}
+
+textarea#name_clother {
+    width: 300px;
+    height: 15px;
+    resize: none;
+    padding: 10px;
+}
+
+.upload_image {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 350px;
+    position: relative;
+}
+
+.check_clother {
+    display: inline-block;
+    padding-right: 15px;
+    width: 305px;
+}
+.border_none_top {
+    border-top: none !important;
+}
+.border_none_bottom {
+    border-bottom: none !important;
+}
+
+#send_data_display {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 5px 10px;
+}
+#send_data {
+    display: none;
+}
+.dataIsNotCorrect {
+    border: 1px solid #ffabab;
+}
+input[type="file"] {
+    padding: 5px 10px;
+    padding-right: 72px;
+}
+.row_upload_image > select {
+    padding: 5px 10px;
+}
